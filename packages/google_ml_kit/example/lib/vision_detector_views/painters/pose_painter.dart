@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-
 import 'coordinates_translator.dart';
 
 class PosePainter extends CustomPainter {
   PosePainter(this.poses, this.absoluteImageSize, this.rotation);
-
   final List<Pose> poses;
   final Size absoluteImageSize;
   final InputImageRotation rotation;
@@ -28,7 +26,8 @@ class PosePainter extends CustomPainter {
       ..color = Colors.blueAccent;
 
     for (final pose in poses) {
-      pose.landmarks.forEach((_, landmark) {
+      print('pose:$pose');
+      pose.landmarks.forEach((_, landmark) async {
         canvas.drawCircle(
             Offset(
               translateX(landmark.x, rotation, size, absoluteImageSize),
@@ -36,6 +35,7 @@ class PosePainter extends CustomPainter {
             ),
             1,
             paint);
+        print('(x,y,z:${landmark.x},${landmark.y},${landmark.z}');
       });
 
       void paintLine(
@@ -75,6 +75,7 @@ class PosePainter extends CustomPainter {
       paintLine(
           PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle, rightPaint);
     }
+    
   }
 
   @override
